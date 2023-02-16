@@ -1,0 +1,58 @@
+---
+title: "Miami Dataset Hypothesis"
+author: "Soumya Ganguly"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### R Markdown
+
+## Formulation of Hypothesis -> Steps to follow
+
+# Step 1: Hypothesis Generation(Before studying the dataset) ->
+
+Attempt to consider variables which can be possibly present in the dataset. The result will be a set of variables which is present in the dataset and also some parameters which is not present in the concerned dataset.
+
+Output: As crime dataset should contain data like
+        [1] Place of occurence
+        [2] Date of occurence
+        [3] Time of occurence
+        [4] Area of occurence
+        [5] Type of area like urban , rural, city center, close to                  airport, tourist spots, party area or downtown for example.
+        [6] Type of residents/people in that area: for example we can               make an attempt to test if the residents or dwellers in that             area have an significant past criminal records.
+        [7] Economic condition of the area/ Employment situation
+        [8] Is it close to country border or port area
+        [9] Types of Crime: like Fraud, Assault, Murder etc
+        [10] Frequency of each types of crime in that area
+        [11] Police to citizen ratio in the area of crime
+        [12] Availability of CCTV or video evidence
+        [13] Population of people with criminal background in the area
+        [14] Proximity to escape routes
+        [15] Proximity to tourist population density 
+        [16] Data on criminal hisotry for the area
+        
+        
+        
+        
+        2
+        
+
+# Step 2: Load and Compare-> Load the dataset and compare with the hypothesis(educated guess) you have made
+
+# Step 3: Data Cleaning-> Identify the columns/variables which are matching with hypothesis and contains significant values to proceeed further. As for the remaining columns ignore/drop them.
+
+# Step 4: Frame a research question
+
+# Step 5: Perform exploratory data analysis
+
+# Step 6: Hypothesis testing
+
+
+
+
+
+ 

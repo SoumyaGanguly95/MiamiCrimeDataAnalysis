@@ -1,0 +1,83 @@
+---
+title: "Miami Dataset Hypothesis"
+author: "Soumya Ganguly"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### R Markdown
+
+## Formulation of Hypothesis -\> Steps to follow
+
+Step 1: Hypothesis Generation(Before studying the dataset)
+
+Attempt to consider variables which can be possibly present in the dataset. The result will be a set of variables which is present in the dataset and also some parameters which is not present in the concerned
+dataset.
+
+Output: To make a decision or prediction about a possible future crime or related assumptions as per our research question the following variables might be helpful;
+
+1.  Place, Date, Time and Area of occurence: It will help      us understand the trend or pattern of occurence of the     crime.
+
+2.  Data like area-type for crime might be useful. Type of     area like urban , rural, city center, close to             airport, tourist spots, party area or downtown for         example.
+
+3.  Type of residents/people in that area: if there is         data about financial status, age group, employment         status of the residents or people frequently observed      in the area; it might be useful.
+
+4.  Location of the area; proximity to probable escape        routes(border areas and port regions)
+
+5.  Types of Crime: like Fraud, Assault, Murder etc
+
+6.  Frequency of each types of crime in that area
+
+7.  Police to citizen ratio in the area of crime
+
+8.  Availability of CCTV or video evidence
+
+9.  Population density of criminals: If there is a             possibility to check the number or people with past        criminal records and compare with total population
+
+Step 2: Load and Compare-\> Load the dataset and compare          with the hypothesis(educated guess) you have made
+
+
+Step 3: Data Cleaning-\> Identify the columns/variables            which are matching with hypothesis and contains            significant values to proceeed further. As for the         remaining columns ignore/drop them.
+
+Step 4: Frame a research question
+
+Question 1: For a specific region does previous history of             crime-type repeat itself over time?
+
+Premisse: We can consider crime counts, crimelogs and also           compare data in two different time frames and              try to find out common trends.
+
+#Null and Alternative Hypotheses
+
+h0 -\> Previous crime history of certain crime type do not        influence subsequent crimes in an area
+
+ha -\> Previous crime history of certain crime type               influences subsequent crimes in an area
+
+Question 2: Can proximity to an area of interest, increase             the overall crime rate for an area?
+
+Premisse: We can check whether there is a bank or vault or           museum within maybe 500 m or 1 km. It can be               considered as a motivation for a burglary or               robbery for instance?
+
+#Null and Alternative Hypotheses
+
+h0 -\> Proximity to an area of interest doesnot affect            crime rate
+
+ha -\> Proximity to an area of interest affects crime rate
+
+Question 3: Is environmental crimes of certain type                    related to region of occurence?
+
+Premisse: For instance is illegal dumping occuring more              frequently in certain areas in comparison to               others.
+
+#Null and Alternative Hypotheses
+
+h0 -\> Environmental crime is not related to region of            occurence
+
+ha -\> Environmental crime is related to region of                occurence
+
+Step 5: Perform exploratory data analysis
+
+Step 6: Hypothesis testing
