@@ -25,7 +25,7 @@ getwd()
 # Setting current working directory
 setwd("D://MyWorkspace//AOSD-Course//R-Workspace//AOSDFinalAssignment//data")
 
-# Load GeoPackage
+# Load Geo Package
 miamiCrimeData = "com_police_data.gpkg"
 
 # Explore the layers available

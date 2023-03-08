@@ -50,7 +50,7 @@ Step 4: Frame a research question
 
 Question 1: For a specific region does previous history of crime-type repeat itself over time?
 
-Premisse: We can consider crime counts, crimelogs and also compare data in two different time frames and try to find out common trends.
+Premisse: We can consider crime counts, crime logs and also compare data in two different time frames and try to find out common trends.
 
 #Null and Alternative Hypotheses
 
@@ -60,7 +60,7 @@ ha -\> Previous crime history of certain crime type   influences subsequent crim
 
 Question 2: Can proximity to an area of interest, increase the overall crime rate for an area?
 
-Premisse: We can check whether there is a bank or vault or museum within maybe 500 m or 1 km. It can be considered as a motivation for a burglary or robbery for instance?
+Premisse : We can check whether there is a bank or vault or museum within maybe 500 m or 1 km. It can be considered as a motivation for a burglary or robbery for instance?
 
 #Null and Alternative Hypotheses
 
