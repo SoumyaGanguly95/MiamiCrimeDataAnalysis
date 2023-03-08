@@ -13,7 +13,7 @@ miami_data <- st_read("com_police_data.gpkg") %>%
 # List all layer names and their type in the data source
 st_layers("com_police_data.gpkg")
 
-# Reading  the required layers and working on the hypothesis
+# Load Geo package and read the required layers and working on the hypothesis
 miami_data_violent_crimes <- st_read("com_police_data.gpkg", layer = "com_violent_crime_2021_22") %>% 
   st_transform(4326) %>% 
   st_make_valid() # Make geometries valid
@@ -64,9 +64,12 @@ ggplot(crime_counts, aes(x=time_period, y=count, color=as.factor(year))) +
   labs(x="Time Period", y="Crime Count", color="Year")
 
 # Perform hypothesis testing using a chi-squared test
-crime_counts_wide <- spread(crime_counts, key = year, value = count)
-crime_counts_wide[, 2:3] <- lapply(crime_counts_wide[, 2:3], as.numeric)  # convert columns to numeric
-crime_counts_wide <- na.omit(crime_counts_wide)  # remove missing values
-chisq <- chisq.test(crime_counts_wide[, 2:3])
+cont_table <- table(crime_counts$year, crime_counts$time_period)
 
-chisq$p.value # Check the p-value to determine whether to reject or fail to reject the null hypothesis
+# Perform the chi-square test on the contingency table
+chisq_result <- chisq.test(cont_table)
+
+# Print the result
+chisq_result
+
+chisq_result$p.value # Check the p-value to determine whether to reject or fail to reject the null hypothesis
