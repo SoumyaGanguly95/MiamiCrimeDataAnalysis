@@ -1,7 +1,6 @@
 ---
-title: Final Report for the work in Miami Crime Dataset. Hypothesis made , followed
-  by performing exploratory data analysis and finally drawing conclusions and supporting
-  with suitable diagrams.
+title: "<h2>Final assignment report for the course Analysis of Spatio Temporal Data. Dataset used is Miami Crime Dataset.</h2>"
+Url: https://github.com/routineactivity/city_of_miami_dataset
 author: "Soumya Ganguly"
 date: "`r Sys.Date()`"
 output: html_document
@@ -12,74 +11,85 @@ knitr::opts_chunk$set(echo = TRUE)
 options(repos = c(CRAN = "https://cran.rstudio.com/"))
 ```
 
-### Introduction
+# Introduction
 
+<p style="text-align:center;">
 
-### Data
+The formulation of a hypothesis is an essential step in any research study. It helps to provide a direction to the research by creating a framework to test assumptions and make predictions about the phenomenon being studied. In this assignment, we will follow the steps involved in formulating a hypothesis. Firstly, we will generate a set of variables that can potentially affect the phenomenon being studied. Next, we will load and compare the dataset to the generated hypothesis and clean the data to proceed further. Then, we will frame research questions and formulate null and alternative hypotheses. Finally, we will perform exploratory data analysis and hypothesis testing to validate or reject our hypotheses. We will apply this approach to understand if proximity to certain areas of interest increases the overall crime rate, whether previous crime history of a certain type influences subsequent crimes in an area, and whether environmental crimes of a certain type are related to the region of occurrence. The research questions and methods are elaborated further in the Methods section.
+
+</p>
+
+Based on analysis two research questions were formulated which are discussed further as hypothesis 1 and hypothesis 2.
+
+#### Hypothesis 1
+
+-   **Statement** For a specific region does previous history of crime repeat itself over time?
+
+-   **Premise** We can consider crime counts, crime logs and also compare data in two different time frames and try to find out common trends.
+
+#### Null and Alternative Hypotheses
+
+**h0 -\>** Previous crime history of certain crime type do not influence subsequent crimes in an area
+
+**ha -\>** Previous crime history of certain crime type influences subsequent crimes in an area
+
+#### Hypothesis 2
+
+-   **Statement** Proximity to an area of interest affects(increase) the overall crime \## rate for the area?
+
+-   **Premise** The purpose of this analysis is to determine if proximity to an area of interest has any effect on the overall crime rate in an area. In this analysis, we will investigate whether the presence of a bank or vault or museum within a certain distance (e.g. 500m or 1km) can be considered as a motivation for a burglary or robbery, and whether this proximity affects the overall crime rate in the area.
+
+#### Null and Alternative Hypotheses
+
+**h0:** Proximity to an area of interest does not affect the crime rate.
+
+**ha:** Proximity to an area of interest affects the crime rate.
+
+# Data
 
 The dataset used is titled as "Regression Practice Dataset, Miami Public Safety". As the title suggests, it is a dataset related to public safety in the city of Miami, Florida, and is designed for use in regression analysis.
 
 Here is some information about the dataset:
 
-[1] The dataset includes 14 columns, with over 22,000 rows of data. 
-[2] Each row corresponds to a specific incident of crime or public safety concern in Miami.
-[3] Each column provides different information about the incident, such as the date, location, and       type of offense.
-[4] The dataset is designed for use in regression analysis, which means that it is intended to be        used to identify patterns and relationships in the data, with the goal of predicting future          trends or outcomes. 
-[5] The dataset is publicly available on GitHub and was created by an individual named                   routineactivity, who has shared it for educational and research purposes. It is not clear whether     this dataset has been used in any published research or academic work. Overall, this dataset         provides a useful resource for those interested in analyzing patterns and trends in public safety     incidents in the city of Miami. By exploring the data and performing regression analysis, the        researchers and analysts may be able to identify patterns and relationships that could inform        policy decisions or help improve public safety in the city.
+1.  The dataset includes 14 columns, with over 22,000 rows of data.
 
-### Methods: Research Questions, Hypothesis and approaches
+2.  Each row corresponds to a specific incident of crime or public safety concern in Miami.
 
-## Formulation of Hypothesis -\> Steps to follow
+3.  Each column provides different information about the incident, such as the date, location and type of offense.
 
-Step 1: Hypothesis Generation(Before studying the dataset)
+4.  The dataset is designed for use in regression analysis, which means that it is intended to be used to identify patterns and relationships in the data, with the goal of predicting future trends or outcomes.
 
-Attempt to consider variables which can be possibly present in the dataset. The result will be a set of variables which is present in the dataset and also some parameters which is not present in the concerned
-dataset.
+5.  The dataset is publicly available on GitHub and was created by an individual named routineactivity, who has shared it for educational and research purposes. It is not clear whether this dataset has been used in any published research or academic work. Overall, this dataset provides a useful resource for those interested in analyzing patterns and trends in public safety incidents in the city of Miami. By exploring the data and performing regression analysis, the researchers and analysts may be able to identify patterns and relationships that could inform policy decisions or help improve public safety in the city.
 
-Output: To make a decision or prediction about a possible future crime or related assumptions as per our research question the following variables might be helpful;
+# Methods:
 
-1.  Place, Date, Time and Area of occurence: It will help us understand the trend or pattern of occurence of the crime.
+### For Hypothesis 1 the following steps were performed:
 
-2.  Data like area-type for crime might be useful. Type of area like urban , rural, city center, close to airport, tourist spots, party area or downtown for example.
+1.  Firstly, we define the time period of interest (e.g., one year, five years, etc.) and the geographic to be studied.
 
-3.  Type of residents/people in that area: if there is data about financial status, age group, employment status of the residents or people frequently observed in the area; it might be useful.
+2.  Next, we collect data on the crime type of interest for that time period and area.
 
-4.  Location of the area; proximity to probable escape routes(border areas and port regions)
+3.  Create a time series plot of the crime counts over the time period of interest. This will allow us to visualize any trends or patterns in the data over time.
 
-5.  Types of Crime: like Fraud, Assault, Murder etc
+4.  Use time series analysis techniques, such as auto-regressive integrated moving average (ARIMA) models, to model the data and identify any significant trends or patterns. Specifically, it can be tested whether the previous crime history of a certain crime type is a significant predictor of subsequent crimes in the area.
 
-6.  Frequency of each types of crime in that area
+5.  Next, we use hypothesis testing techniques to test the null and alternative hypotheses you defined.
 
-7.  Police to citizen ratio in the area of crime
+6.  Interpret the results and draw conclusions about whether there is evidence to support the alternative hypothesis that previous crime history of a certain crime type influences subsequent crimes in the area.
 
-8.  Availability of CCTV or video evidence
+### For Hypothesis 2 the following steps were performed:
 
-9.  Population density of criminals: If there is a possibility to check the number or people with past criminal records and compare with total population
+1.  To prove/disprove the second hypothesis we need neighborhood and proximity information. So primary task was to merge the relevant layers which contains neighborhood and proximity information and join the columns with crime-related data.
 
-Step 2: Load and Compare-\> Load the dataset and compare with the hypothesis(educated guess) you have made
+2.  Thereafter, the data was grouped based on a specific crime-type and incident_count for the particular crime-type was computed. This helps in further investigating whether the proximity to a specific region is influencing the incident_count for the specific crime-type.
 
+3.  Next, linear regression model was constructed to understand the significance of each of these proximity variables on incident count.
 
-Step 3: Data Cleaning-\> Identify the columns/variables which are matching with hypothesis and contains significant values to proceeed further. As for the remaining columns ignore/drop them.
+4.  Finally, hypothesis test throws clarity whether our investigation lead to any conclusive solution or further investigation was needed.
 
-Step 4: Frame a research question
+# Results
 
-Based on analysis two research questions were formulated which are discussed further as hypothesis 1 and hypothesis 2.
-
-### Results
-
-## Hypothesis 1: 
-
-## Statement: For a specific region does previous history of crime repeat itself ## over time?
-
-Purpose and approach: We can consider crime counts, crime logs and also compare data in two different time frames and try to find out common trends.
-
-#Null and Alternative Hypotheses
-
-h0 -\> Previous crime history of certain crime type do not influence subsequent crimes in an area
-
-ha -\> Previous crime history of certain crime type   influences subsequent crimes in an area
-
-## Installing package dependencies
+#### Installing package dependencies
 
 ```{r "Installation and directory setup", include=FALSE}
 
@@ -119,6 +129,7 @@ setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
 
 ```
 
+## Hypothesis 1 Solution:
 
 ```{r "Hypothesis 1 => Approach 1"}
 
@@ -145,12 +156,25 @@ region_buffered <- region_sf %>%
 # Filter data and perform intersection
 miami_filtered_violent_crimes <- miami_data_violent_crimes %>% 
   st_intersection(region_buffered)
+```
 
+```{r, fig.format='html'}
 
 # Plot crime locations to visualize the data
 ggplot(miami_filtered_violent_crimes) +
   geom_sf()
 
+# set the figure file name and extension
+fig.path <- "D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/plot1"
+fig.ext <- "html"
+
+# save the plot in the specified format
+fig.file <- paste0(fig.path, ".", fig.ext)
+knitr::fig_path(fig.file)
+
+```
+
+```{r}
 
 # Calculate crime counts for different time periods and counties
 time_periods <- c("2020-01-01/2021-12-31", "2022-01-01/2022-12-31") # Change these to the specific time periods you want to analyze
@@ -159,14 +183,26 @@ crime_counts <- miami_filtered_violent_crimes %>%
   group_by(year=as.numeric(substr(date_eu, 1, 4)), county=as.factor(county), time_period=cut(as.POSIXct(date_eu), breaks=time_period_breaks)) %>% 
   summarize(count=n())
 
+```
 
-# Plot crime counts over time to visualize trends
+```{r, fig.format='html'}
+# your code to generate a plot
 ggplot(crime_counts, aes(x=time_period, y=count, color=as.factor(year))) +
   geom_point() +
   geom_line() +
   labs(x="Time Period", y="Crime Count", color="Year")
 
+# set the figure file name and extension
+fig.path <- "D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/plot2"
+fig.ext <- "html"
 
+# save the plot in the specified format
+fig.file <- paste0(fig.path, ".", fig.ext)
+knitr::fig_path(fig.file)
+
+```
+
+```{r}
 # Create a contingency table of the counts of the two variables
 # To find correlation between yearly crime counts with respect to area
 cont_table_year_county <- table(crime_counts$year, crime_counts$county)
@@ -182,7 +218,6 @@ chisq_result_year_period$p.value # Check the p-value to determine whether to rej
 
 
 ```
-
 
 ```{r "Hypothesis 1 => Approach 2 (Performing Approach 1 on specific crime type)"}
 
@@ -227,10 +262,26 @@ miami_filtered_violent_crimes <- miami_data_violent_crimes %>%
   filter(crime_type==crime_name) %>% 
   st_intersection(region_buffered)
 
+```
+
+```{r, fig.format='html'}
 
 # Plot crime locations to visualize the data
 ggplot(miami_filtered_violent_crimes) +
   geom_sf()
+
+# set the figure file name and extension
+fig.path <- "D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/plot3"
+fig.ext <- "html"
+
+# save the plot in the specified format
+fig.file <- paste0(fig.path, ".", fig.ext)
+knitr::fig_path(fig.file)
+  
+```
+
+```{R}
+
 
 # Calculate crime counts for different time periods and counties
 time_periods <- c("2021-11-28/2021-12-28", "2022-01-23/2022-03-31") # Change these to the specific time periods you want to analyze
@@ -238,6 +289,9 @@ time_period_breaks <- as.POSIXct(unlist(strsplit(time_periods, "/")), format="%Y
 crime_counts <- miami_filtered_violent_crimes %>% 
   group_by(year=as.numeric(substr(date_eu, 1, 4)), county=as.factor(county), time_period=cut(as.POSIXct(date_eu), breaks=time_period_breaks)) %>% 
   summarize(count=n())
+```
+
+```{r, fig.format='html'}
 
 # Plot crime counts over time to visualize trends
 ggplot(crime_counts, aes(x=time_period, y=count, color=as.factor(year))) +
@@ -245,7 +299,17 @@ ggplot(crime_counts, aes(x=time_period, y=count, color=as.factor(year))) +
   geom_line() +
   labs(x="Time Period", y="Crime Count", color="Year")
 
+# set the figure file name and extension
+fig.path <- "D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/plot4"
+fig.ext <- "html"
 
+# save the plot in the specified format
+fig.file <- paste0(fig.path, ".", fig.ext)
+knitr::fig_path(fig.file)
+
+```
+
+```{R}
 
 # Create a contingency table of the counts of the two variables
 
@@ -258,10 +322,6 @@ chisq_result_year_county
 
 # Check the p-value to determine whether to reject or fail to reject the null hypothesis
 chisq_result_year_county$p.value 
-
-
-
-
 
 # To find correlation between crime counts in an area with respect to time period
 cont_table_year_period <- table(crime_counts$time_period, crime_counts$county)
@@ -276,7 +336,6 @@ chisq_result_year_period$p.value
 
 
 ```
-
 
 ```{r "Hypothesis 1 => Approach 3" }
 
@@ -305,9 +364,25 @@ miami_data_filtered <- miami_data_filtered %>%
 # Converting the data frame into a time-series object
 miami_df_ts <- ts(miami_data_filtered$incident_count, frequency = 7) # assuming weekly data
 
+```
+
+```{r, fig.format='html'}
+
 # Create a time series plot of the crime counts
 plot(miami_df_ts, main = paste0("Crime Counts for ", crime_name, " in ", area))
 
+# set the figure file name and extension
+fig.path <- "D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/plot5"
+fig.ext <- "html"
+
+# save the plot in the specified format
+fig.file <- paste0(fig.path, ".", fig.ext)
+knitr::fig_path(fig.file)
+
+
+```
+
+```{R}
 # Fit an ARIMA model to the time series data
 arima_model <- auto.arima(miami_df_ts)
 
@@ -329,8 +404,6 @@ mean(high_prev_crime)
 t.test(low_prev_crime, high_prev_crime)
 
 ```
-
-
 
 ```{r "Hypothesis 1 => Approach 4" }
 
@@ -358,33 +431,42 @@ model <- lm(incident_count ~ weekday + county + hour + latitude + longitude, dat
 # Check the model summary to see the coefficients and significance levels
 summary(model)
 
+```
+
+```{r, fig.format='html'}
+
+
 # Check the normality of residuals using a Q-Q plot and a Anderson Darling test
 qqPlot(model, main="Q-Q Plot") # requires the car library
 ad.test(residuals(model))
 
+# set the figure file name and extension
+fig.path <- "D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/plot6"
+fig.ext <- "html"
+
+# save the plot in the specified format
+fig.file <- paste0(fig.path, ".", fig.ext)
+knitr::fig_path(fig.file)
+
 # Check the linearity of the model using a partial residual plot
 crPlots(model) # requires the car library
 
+# set the figure file name and extension
+fig.path <- "D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/plot7"
+fig.ext <- "html"
+
+# save the plot in the specified format
+fig.file <- paste0(fig.path, ".", fig.ext)
+knitr::fig_path(fig.file)
+
 ```
 
-
-## Hypothesis 2:
-
-## Statement: Proximity to an area of interest affects(increase) the overall crime ## rate for the area?
-
-## Purpose and approach to second hypothesis:
-The purpose of this analysis is to determine if proximity to an area of interest has any effect on the overall crime rate in an area. In this analysis, we will investigate whether the presence of a bank or vault or museum within a certain distance (e.g. 500m or 1km) can be considered as a motivation for a burglary or robbery, and whether this proximity affects the overall crime rate in the area.
-
-#Null and Alternative Hypotheses
-
-H0: Proximity to an area of interest does not affect the crime rate.
-
-Ha: Proximity to an area of interest affects the crime rate.
-
-## In this section , data from 3 different layers were joined and suitable columns
-## were extracted. After that frequency/incident_count column was added to proceed ## further with the regression model.
+## Hypothesis 1 Solution:
 
 ```{r "Hypothesis 2" }
+
+# In this section , data from 3 different layers were joined and suitable columns
+# were extracted. After that frequency/incident_count column was added to proceed further with   # the regression model.
 
 # Setting current working directory
 setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
@@ -440,6 +522,11 @@ anova(model)
 # Perform the Wilcoxon rank-sum test
 wilcox.test(incident_count ~ dist450m_bank, data = miami_crime_data_optimized)
 
+```
+
+```{r, fig.format='html'}
+
+
 # Visualize the results
 ggplot(miami_crime_data_optimized, aes(x = dist_bank, y = incident_count)) + 
   geom_point() + 
@@ -448,34 +535,23 @@ ggplot(miami_crime_data_optimized, aes(x = dist_bank, y = incident_count)) +
 
 ```
 
+# Conclusions
 
-#### Conclusions
+### Hypothesis 1:
 
-### Hypothesis 1: 
+**Approach 1 and 2** Nothing conclusive could be drawn from the two approaches. Chisquared test suggested a possibility of incorrect evaluation. Also the p values received were much more than 0.05. So the Null Hypothesis cannot be totally ignored.
 
-Approach 1 and 2: Nothing conclusive could be drawn from the two approaches. Chisquared test suggested a possibility of incorrect evaluation. Also the p values received were much more than 0.05. So the Null Hypothesis cannot be totally ignored.
-
-## Approach 3: 
-
-#Conclusion 1:  
-
-The ARIMA model results suggest that the time series data has a non-zero mean and shows a negative trend. The coefficients of the ARIMA model indicate that there is a significant negative autocorrelation at lag 1 for both the AR and seasonal AR terms.
+**Approach 3** The ARIMA model results suggest that the time series data has a non-zero mean and shows a negative trend. The coefficients of the ARIMA model indicate that there is a significant negative autocorrelation at lag 1 for both the AR and seasonal AR terms.
 
 The training set error measures suggest that the ARIMA model has a low error, which is further supported by the log likelihood, AIC, and BIC values.
 
-
-
-# Conclusion 2: 
-
-The Welch two-sample t-test results indicate that there is a significant difference in means between the low_prev_crime and high_prev_crime groups. The p-value is very small (< 2.2e-16), indicating that the null hypothesis of no difference in means can be rejected in favor of the alternative hypothesis of a difference in means. The confidence interval also suggests that the true difference in means between the two groups is not zero.
+The Welch two-sample t-test results indicate that there is a significant difference in means between the low_prev_crime and high_prev_crime groups. The p-value is very small (\< 2.2e-16), indicating that the null hypothesis of no difference in means can be rejected in favor of the alternative hypothesis of a difference in means. The confidence interval also suggests that the true difference in means between the two groups is not zero.
 
 Overall, these results provide evidence in favor of the alternate hypothesis that there is a difference in crime rates between the low_prev_crime and high_prev_crime groups.
 
-## Approach 4:
+**Approach 4** The following conclusions can be drawn in favor or against the alternate hypothesis:
 
-The following conclusions can be drawn in favor or against the alternate hypothesis:
-
-The coefficients for some of the variables, such as weekday, county, and latitude, are statistically significant (indicated by the ***, **, or * symbols) at a 5% significance level, which suggests that these variables have a significant effect on the incident_count.
+The coefficients for some of the variables, such as weekday, county, and latitude, are statistically significant (indicated by the ***,** , or* symbols) at a 5% significance level, which suggests that these variables have a significant effect on the incident_count.
 
 The p-value for the F-statistic is less than 2.2e-16, which indicates that the overall model is significant.
 
@@ -485,14 +561,9 @@ The Anderson-Darling normality test for the residuals shows a p-value less than 
 
 In summary, the model suggests that the weekday, county, and latitude variables have a significant effect on the incident_count. However, the low Adjusted R-squared value and the violation of normality assumptions suggest that the model may not fit the data well. Therefore, further investigation and analysis may be required to draw reliable conclusions.
 
-To summarize, Approach 3 can strongly support in favor of Hypothesis 1. 
-
+To summarize, Approach 3 can strongly support in favor of Hypothesis 1.
 
 ### Hypothesis 2:
-
-## Approach 1:
-
-# Conclusion: 
 
 Based on the output, we can draw the following conclusions:
 
@@ -506,29 +577,16 @@ The Wilcoxon rank sum test shows a p-value of 7.842e-06, which is less than the 
 
 Overall, the results suggest that proximity to bars or convenience stores does not significantly affect the crime rate, but proximity to banks does. However, it is important to note that the adjusted R-squared value is very low, indicating that the model does not explain much of the variation in incident counts. Therefore, further analysis and modeling may be necessary to fully understand the relationship between proximity to different types of areas and crime rates in Miami.
 
+# References
 
-#### References
+[ARIMA modeling: "Time Series Analysis and Its Applications: With R Examples" by Shumway, R. H., & Stoffer, D. S. (2017)](https://www.researchgate.net/publication/265365840_Time_Series_Analysis_and_Its_Applications_With_R_Examples)
 
-[1] ARIMA modeling: "Time Series Analysis and Its Applications: With R Examples" by Shumway, R. H., & Stoffer, D. S. (2017).
-URL: https://www.researchgate.net/publication/265365840_Time_Series_Analysis_and_Its_Applications_With_R_Examples
+[linear regression and its assumptions: "Linear Models in Statistics"](https://www.utstat.toronto.edu/~brunner/books/LinearModelsInStatistics.pdf)
 
+[A beginner's guide to understanding p-values](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3576830/)
 
-[2] linear regression and its assumptions: "Linear Models in Statistics".
-URL: https://www.utstat.toronto.edu/~brunner/books/LinearModelsInStatistics.pdf
+[P Values, Hypothesis Testing, and Statistical Significance: A Brief Tutorial](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5808128/)
 
-[3] A beginner's guide to understanding p-values: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3576830/
+[Official Documentation for ARC GIS PRO was helpful](https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/regression-analysis-basics.htm)
 
-[4] P Values, Hypothesis Testing, and Statistical Significance: A Brief Tutorial:             https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5808128/
-
-[5] Official Documentation for ARC GIS PRO was helpful
-https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/regression-analysis-basics.htm
-
-[6] Watched a tutorial for ggplot2: https://towardsdatascience.com/data-visualization-with-ggplot2-db04c4956236
-
-
-
-
-
-
-
-
+[Watched a tutorial for ggplot2](https://towardsdatascience.com/data-visualization-with-ggplot2-db04c4956236)
