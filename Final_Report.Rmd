@@ -81,29 +81,38 @@ ha -\> Previous crime history of certain crime type   influences subsequent crim
 
 ## Installing package dependencies
 
-```{r Installation}
+```{r Installation and directory setup}
 
 # Install Packages
 install.packages("contrib.url")
+install.packages("caret")
+install.packages("car")
+install.packages("dplyr")
+install.packages("forecast")
+install.packages("ggplot2")
+install.packages("lubridate")
+install.packages("nortest")
+install.packages("rgdal")
 install.packages("sf")
+install.packages("spdep")
 install.packages("spatstat")
 install.packages("stars")
-install.packages("ggplot2")
-install.packages("rgdal")
-install.packages("dplyr")
-install.packages("RSQLite")
 install.packages("tidyverse")
 
 # Load the libraries
+library(caret)
+library(car)
+library(dplyr)
+library(forecast)
+library(ggplot2)
+library(lubridate)
+library(nortest)
+library(rgdal)
 library(sf)
 library(spdep)
 library(spatstat)
 library(stars)
-library(ggplot2)
-library(rgdal)
 library(tidyverse)
-library(sf)
-library(dplyr)
 
 # Setting current working directory
 setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
@@ -113,9 +122,9 @@ setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
 
 ```{r Hypothesis 1 => Approach 1}
 
-# Load required packages
-library(sf)
-library(tidyverse)
+# Setting current working directory
+setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
+
 
 # Load Geo package and read the required layers and working on the hypothesis
 miami_data_violent_crimes <- st_read("com_police_data.gpkg", layer = "com_violent_crime_2021_22") %>% 
@@ -177,9 +186,8 @@ chisq_result_year_period$p.value # Check the p-value to determine whether to rej
 
 ```{r Hypothesis 1 => Approach 2 (Performing Approach 1 on specific crime type}
 
-# Load required packages
-library(sf)
-library(tidyverse)
+# Setting current working directory
+setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
 
 # Load Geo package
 miami_data <- st_read("com_police_data.gpkg") %>% 
@@ -239,8 +247,6 @@ ggplot(crime_counts, aes(x=time_period, y=count, color=as.factor(year))) +
 
 
 
-
-
 # Create a contingency table of the counts of the two variables
 
 # To find correlation between yearly crime counts with respect to area
@@ -274,9 +280,9 @@ chisq_result_year_period$p.value
 
 ```{r Hypothesis 1 => Approach 3}
 
-library(tidyverse)
-library(lubridate)
-library(forecast)
+# Setting current working directory
+setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
+
 
 # Load Geo package and read the required layers and working on the hypothesis
 miami_data <- st_read("com_police_data.gpkg", layer = "com_violent_crime_2021_22") %>% 
@@ -328,11 +334,8 @@ t.test(low_prev_crime, high_prev_crime)
 
 ```{r Hypothesis 1 => Approach 4}
 
-# Load the necessary libraries and the dataset
-library(tidyverse)
-library(caret)
-library(car)
-library(nortest)
+# Setting current working directory
+setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
 
 
 # Load Geo package and read the required layers and working on the hypothesis
@@ -362,8 +365,6 @@ ad.test(residuals(model))
 # Check the linearity of the model using a partial residual plot
 crPlots(model) # requires the car library
 
-
-
 ```
 
 
@@ -380,45 +381,16 @@ H0: Proximity to an area of interest does not affect the crime rate.
 
 Ha: Proximity to an area of interest affects the crime rate.
 
-## Installing package dependencies
+## In this section , data from 3 different layers were joined and suitable columns
+## were extracted. After that frequency/incident_count column was added to proceed ## further with the regression model.
 
-```{r Hypothesis 2 => Approach 1}
-
-# Install Packages
-install.packages("contrib.url")
-install.packages("sf")
-install.packages("spatstat")
-install.packages("stars")
-install.packages("ggplot2")
-install.packages("rgdal")
-install.packages("dplyr")
-install.packages("RSQLite")
-install.packages("tidyverse")
-
-# Load the libraries
-library(sf)
-library(spdep)
-library(spatstat)
-library(stars)
-library(ggplot2)
-library(rgdal)
-library(tidyverse)
-library(sf)
-library(dplyr)
+```{r Hypothesis 2 => Approach 1 include=FALSE}
 
 # Setting current working directory
 setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
 
-```
 
-
-
-## In this section , data from 3 different layers were joined and suitable columns
-## were extracted. After that frequency/incident_count column was added to proceed ## further with the regression model.
-
-```{r Loading data and transformation, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-# Load the crime dataset
+# Loading crime data and transformation
 miami_data <- st_read("com_police_data.gpkg", layer = "com_violent_crime_2021_22") %>% 
   st_transform(4326) %>% 
   st_make_valid()
@@ -454,13 +426,8 @@ miami_crime_data_optimized <- filtered_data %>%
 # Remove any missing data
 miami_crime_data_optimized <- na.omit(miami_crime_data_optimized)
 
-```
 
-
-## In this section the data was fitted into chosen model follwed by evaluation.
-```{r Hypothesis Testing and Result, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
+# Evaluation and Hypothesis Testing
 # Fit the regression model
 model <- lm(incident_count ~ dist_bars + dist_convenience, data = miami_crime_data_optimized)
 
@@ -480,7 +447,6 @@ ggplot(miami_crime_data_optimized, aes(x = dist_bank, y = incident_count)) +
   labs(title = "Relationship between Crime Incident Count and distance to nearest bank")
 
 ```
-
 
 
 ### Conclusions
