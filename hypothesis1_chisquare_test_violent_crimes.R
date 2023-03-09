@@ -4,6 +4,9 @@
 library(sf)
 library(tidyverse)
 
+# Setting current working directory
+setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
+
 # Load Geo package and read the required layers and working on the hypothesis
 miami_data_violent_crimes <- st_read("com_police_data.gpkg", layer = "com_violent_crime_2021_22") %>% 
   st_transform(4326) %>% 

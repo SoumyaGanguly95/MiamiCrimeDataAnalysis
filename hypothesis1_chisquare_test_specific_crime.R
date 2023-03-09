@@ -3,7 +3,7 @@ library(sf)
 library(tidyverse)
 
 # Setting current working directory
-setwd("D://MyWorkspace//AOSD-Course//R-Workspace//AOSDFinalAssignment//data")
+setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
 
 # Load Geo package
 miami_data <- st_read("com_police_data.gpkg") %>% 

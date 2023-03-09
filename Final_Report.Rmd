@@ -81,7 +81,7 @@ ha -\> Previous crime history of certain crime type   influences subsequent crim
 
 ## Installing package dependencies
 
-```{r Installation and directory setup}
+```{r "Installation and directory setup", include=FALSE}
 
 # Install Packages
 install.packages("contrib.url")
@@ -120,7 +120,7 @@ setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
 ```
 
 
-```{r Hypothesis 1 => Approach 1}
+```{r "Hypothesis 1 => Approach 1"}
 
 # Setting current working directory
 setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
@@ -184,7 +184,7 @@ chisq_result_year_period$p.value # Check the p-value to determine whether to rej
 ```
 
 
-```{r Hypothesis 1 => Approach 2 (Performing Approach 1 on specific crime type}
+```{r "Hypothesis 1 => Approach 2 (Performing Approach 1 on specific crime type)"}
 
 # Setting current working directory
 setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
@@ -278,7 +278,7 @@ chisq_result_year_period$p.value
 ```
 
 
-```{r Hypothesis 1 => Approach 3}
+```{r "Hypothesis 1 => Approach 3" }
 
 # Setting current working directory
 setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
@@ -332,7 +332,7 @@ t.test(low_prev_crime, high_prev_crime)
 
 
 
-```{r Hypothesis 1 => Approach 4}
+```{r "Hypothesis 1 => Approach 4" }
 
 # Setting current working directory
 setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
@@ -384,7 +384,7 @@ Ha: Proximity to an area of interest affects the crime rate.
 ## In this section , data from 3 different layers were joined and suitable columns
 ## were extracted. After that frequency/incident_count column was added to proceed ## further with the regression model.
 
-```{r Hypothesis 2 => Approach 1 include=FALSE}
+```{r "Hypothesis 2" }
 
 # Setting current working directory
 setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
@@ -449,9 +449,86 @@ ggplot(miami_crime_data_optimized, aes(x = dist_bank, y = incident_count)) +
 ```
 
 
-### Conclusions
+#### Conclusions
+
+### Hypothesis 1: 
+
+Approach 1 and 2: Nothing conclusive could be drawn from the two approaches. Chisquared test suggested a possibility of incorrect evaluation. Also the p values received were much more than 0.05. So the Null Hypothesis cannot be totally ignored.
+
+## Approach 3: 
+
+#Conclusion 1:  
+
+The ARIMA model results suggest that the time series data has a non-zero mean and shows a negative trend. The coefficients of the ARIMA model indicate that there is a significant negative autocorrelation at lag 1 for both the AR and seasonal AR terms.
+
+The training set error measures suggest that the ARIMA model has a low error, which is further supported by the log likelihood, AIC, and BIC values.
 
 
-### References
+
+# Conclusion 2: 
+
+The Welch two-sample t-test results indicate that there is a significant difference in means between the low_prev_crime and high_prev_crime groups. The p-value is very small (< 2.2e-16), indicating that the null hypothesis of no difference in means can be rejected in favor of the alternative hypothesis of a difference in means. The confidence interval also suggests that the true difference in means between the two groups is not zero.
+
+Overall, these results provide evidence in favor of the alternate hypothesis that there is a difference in crime rates between the low_prev_crime and high_prev_crime groups.
+
+## Approach 4:
+
+The following conclusions can be drawn in favor or against the alternate hypothesis:
+
+The coefficients for some of the variables, such as weekday, county, and latitude, are statistically significant (indicated by the ***, **, or * symbols) at a 5% significance level, which suggests that these variables have a significant effect on the incident_count.
+
+The p-value for the F-statistic is less than 2.2e-16, which indicates that the overall model is significant.
+
+The Adjusted R-squared value is 0.08994, which means that the model explains only 8.994% of the variation in the incident_count.
+
+The Anderson-Darling normality test for the residuals shows a p-value less than 2.2e-16, which indicates that the residuals are not normally distributed. This suggests that the linear regression assumptions may not hold, and the results should be interpreted with caution.
+
+In summary, the model suggests that the weekday, county, and latitude variables have a significant effect on the incident_count. However, the low Adjusted R-squared value and the violation of normality assumptions suggest that the model may not fit the data well. Therefore, further investigation and analysis may be required to draw reliable conclusions.
+
+To summarize, Approach 3 can strongly support in favor of Hypothesis 1. 
+
+
+### Hypothesis 2:
+
+## Approach 1:
+
+# Conclusion: 
+
+Based on the output, we can draw the following conclusions:
+
+The coefficients of both dist_bars and dist_convenience are positive, indicating that as proximity to bars or convenience stores increases, so does the incident count.
+
+The p-value for dist_bars is 0.087, which is greater than the significance level of 0.05. Therefore, we cannot reject the null hypothesis that proximity to bars does not affect the crime rate.
+
+The p-value for dist_convenience is 0.124, which is also greater than the significance level of 0.05. Therefore, we cannot reject the null hypothesis that proximity to convenience stores does not affect the crime rate.
+
+The Wilcoxon rank sum test shows a p-value of 7.842e-06, which is less than the significance level of 0.05. Therefore, we reject the null hypothesis and conclude that there is a significant difference in incident counts between areas close to and far from banks.
+
+Overall, the results suggest that proximity to bars or convenience stores does not significantly affect the crime rate, but proximity to banks does. However, it is important to note that the adjusted R-squared value is very low, indicating that the model does not explain much of the variation in incident counts. Therefore, further analysis and modeling may be necessary to fully understand the relationship between proximity to different types of areas and crime rates in Miami.
+
+
+#### References
+
+[1] ARIMA modeling: "Time Series Analysis and Its Applications: With R Examples" by Shumway, R. H., & Stoffer, D. S. (2017).
+URL: https://www.researchgate.net/publication/265365840_Time_Series_Analysis_and_Its_Applications_With_R_Examples
+
+
+[2] linear regression and its assumptions: "Linear Models in Statistics".
+URL: https://www.utstat.toronto.edu/~brunner/books/LinearModelsInStatistics.pdf
+
+[3] A beginner's guide to understanding p-values: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3576830/
+
+[4] P Values, Hypothesis Testing, and Statistical Significance: A Brief Tutorial:             https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5808128/
+
+[5] Official Documentation for ARC GIS PRO was helpful
+https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/regression-analysis-basics.htm
+
+[6] Watched a tutorial for ggplot2: https://towardsdatascience.com/data-visualization-with-ggplot2-db04c4956236
+
+
+
+
+
+
 
 

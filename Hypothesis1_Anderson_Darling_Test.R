@@ -7,7 +7,7 @@ library(nortest)
 
 
 # Setting current working directory
-setwd("D://MyWorkspace//AOSD-Course//R-Workspace//AOSDFinalAssignment//data")
+setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
 
 # Load Geo package and read the required layers and working on the hypothesis
 miami_data <- st_read("com_police_data.gpkg", layer = "com_violent_crime_2021_22") %>% 
