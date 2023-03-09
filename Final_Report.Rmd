@@ -63,48 +63,21 @@ Step 3: Data Cleaning-\> Identify the columns/variables which are matching with 
 
 Step 4: Frame a research question
 
-Question 1: For a specific region does previous history of crime repeat itself over time?
-
-Premisse: We can consider crime counts, crime logs and also compare data in two different time frames and try to find out common trends.
-
-#Null and Alternative Hypotheses
-
-h0 -\> Previous crime history of certain crime type do not influence subsequent crimes in an area
-
-ha -\> Previous crime history of certain crime type   influences subsequent crimes in an area
-
-
-
-
-
+Based on analysis two research questions were formulated which are discussed further as hypothesis 1 and hypothesis 2.
 
 ### Results
 
 ## Hypothesis 1: 
 
-For a specific region does previous history of crime repeat itself over time?
+## Statement: For a specific region does previous history of crime repeat itself ## over time?
 
-Premisse: We can consider crime counts, crime logs and also compare data in two different time frames and try to find out common trends.
+Purpose and approach: We can consider crime counts, crime logs and also compare data in two different time frames and try to find out common trends.
 
 #Null and Alternative Hypotheses
 
 h0 -\> Previous crime history of certain crime type do not influence subsequent crimes in an area
 
 ha -\> Previous crime history of certain crime type   influences subsequent crimes in an area
-
-
-## Hypothesis 2:
-
-## Research Question: Can proximity to an area of interest, increase the overall crime rate for an 
-## area?
-
-## Purpose and approach to second hypothesis:
-The purpose of this analysis is to determine if proximity to an area of interest has any effect on the overall crime rate in an area. In this analysis, we will investigate whether the presence of a bank or vault or museum within a certain distance (e.g. 500m or 1km) can be considered as a motivation for a burglary or robbery, and whether this proximity affects the overall crime rate in the area.
-
-## Hypothesis
-H0: Proximity to an area of interest does not affect the crime rate.
-
-Ha: Proximity to an area of interest affects the crime rate.
 
 ## Installing package dependencies
 
@@ -138,10 +111,310 @@ setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
 ```
 
 
+```{r Hypothesis 1 => Approach 1}
 
-## In this section , data from 3 different layers were joined and suitable columns were 
-## extracted. After that frequency/incident_count column was added to proceed further 
-## with the regression model.
+# Load required packages
+library(sf)
+library(tidyverse)
+
+# Load Geo package and read the required layers and working on the hypothesis
+miami_data_violent_crimes <- st_read("com_police_data.gpkg", layer = "com_violent_crime_2021_22") %>% 
+  st_transform(4326) %>% 
+  st_make_valid() # Make geometries valid
+
+
+# Filter data to focus on a specific region
+region <- st_bbox(c(xmin=-80.31578, ymin=25.70949, xmax=-80.15572, ymax=25.85503), crs=4326) # Change this to the specific region you want to analyze
+
+
+# Create a spatial object from the bounding box
+region_sf <- st_as_sfc(region)
+region_buffered <- region_sf %>% 
+  st_buffer(0.01) # Adjust the buffer distance as needed
+
+
+# Filter data and perform intersection
+miami_filtered_violent_crimes <- miami_data_violent_crimes %>% 
+  st_intersection(region_buffered)
+
+
+# Plot crime locations to visualize the data
+ggplot(miami_filtered_violent_crimes) +
+  geom_sf()
+
+
+# Calculate crime counts for different time periods and counties
+time_periods <- c("2020-01-01/2021-12-31", "2022-01-01/2022-12-31") # Change these to the specific time periods you want to analyze
+time_period_breaks <- as.POSIXct(unlist(strsplit(time_periods, "/")), format="%Y-%m-%d") # Convert each element of time_periods to a POSIXct object
+crime_counts <- miami_filtered_violent_crimes %>% 
+  group_by(year=as.numeric(substr(date_eu, 1, 4)), county=as.factor(county), time_period=cut(as.POSIXct(date_eu), breaks=time_period_breaks)) %>% 
+  summarize(count=n())
+
+
+# Plot crime counts over time to visualize trends
+ggplot(crime_counts, aes(x=time_period, y=count, color=as.factor(year))) +
+  geom_point() +
+  geom_line() +
+  labs(x="Time Period", y="Crime Count", color="Year")
+
+
+# Create a contingency table of the counts of the two variables
+# To find correlation between yearly crime counts with respect to area
+cont_table_year_county <- table(crime_counts$year, crime_counts$county)
+chisq_result_year_county <- chisq.test(cont_table_year_county) # Perform the chi-square test on the contingency table
+chisq_result_year_county
+chisq_result_year_county$p.value # Check the p-value to determine whether to reject or fail to reject the null hypothesis
+
+# To find correlation between crime counts in an area with respect to time period
+cont_table_year_period <- table(crime_counts$time_period, crime_counts$county)
+chisq_result_year_period <- chisq.test(cont_table_year_period) # Perform the chi-square test on the contingency table
+chisq_result_year_period
+chisq_result_year_period$p.value # Check the p-value to determine whether to reject or fail to reject the null hypothesis
+
+
+```
+
+
+```{r Hypothesis 1 => Approach 2 (Performing Approach 1 on specific crime type}
+
+# Load required packages
+library(sf)
+library(tidyverse)
+
+# Load Geo package
+miami_data <- st_read("com_police_data.gpkg") %>% 
+  st_transform(4326) %>% 
+  st_make_valid() # Make geometries valid
+
+# List all layer names and their type in the data source
+st_layers("com_police_data.gpkg")
+
+# Load Geo package and read the required layers and working on the hypothesis
+miami_data_violent_crimes <- st_read("com_police_data.gpkg", layer = "com_violent_crime_2021_22") %>% 
+  st_transform(4326) %>% 
+  st_make_valid() # Make geometries valid
+
+colnames(miami_data_violent_crimes)
+
+# Get bounding box for entire dataset
+bbox_violent_crimes <- st_bbox(miami_data_violent_crimes)
+
+# Print bounding box
+bbox_violent_crimes
+
+crimes <- unique(miami_data_violent_crimes$crime_type)
+print(crimes)
+
+# Filter data to focus on a specific region and crime type 
+crime_name <- "SIMPLE ASSAULT" # Change this to the specific crime type you want to analyze
+region <- st_bbox(c(xmin=-80.31578, ymin=25.70949, xmax=-80.15572, ymax=25.85503), crs=4326) # Change this to the specific region you want to analyze
+
+# Create a spatial object from the bounding box
+region_sf <- st_as_sfc(region)
+region_buffered <- region_sf %>% 
+  st_buffer(0.01) # Adjust the buffer distance as needed
+
+# Filter data and perform intersection
+miami_filtered_violent_crimes <- miami_data_violent_crimes %>% 
+  filter(crime_type==crime_name) %>% 
+  st_intersection(region_buffered)
+
+
+# Plot crime locations to visualize the data
+ggplot(miami_filtered_violent_crimes) +
+  geom_sf()
+
+# Calculate crime counts for different time periods and counties
+time_periods <- c("2021-11-28/2021-12-28", "2022-01-23/2022-03-31") # Change these to the specific time periods you want to analyze
+time_period_breaks <- as.POSIXct(unlist(strsplit(time_periods, "/")), format="%Y-%m-%d") # Convert each element of time_periods to a POSIXct object
+crime_counts <- miami_filtered_violent_crimes %>% 
+  group_by(year=as.numeric(substr(date_eu, 1, 4)), county=as.factor(county), time_period=cut(as.POSIXct(date_eu), breaks=time_period_breaks)) %>% 
+  summarize(count=n())
+
+# Plot crime counts over time to visualize trends
+ggplot(crime_counts, aes(x=time_period, y=count, color=as.factor(year))) +
+  geom_point() +
+  geom_line() +
+  labs(x="Time Period", y="Crime Count", color="Year")
+
+
+
+
+
+# Create a contingency table of the counts of the two variables
+
+# To find correlation between yearly crime counts with respect to area
+cont_table_year_county <- table(crime_counts$year, crime_counts$county)
+chisq_result_year_county <- chisq.test(cont_table_year_county) 
+
+# Perform the chi-square test on the contingency table
+chisq_result_year_county
+
+# Check the p-value to determine whether to reject or fail to reject the null hypothesis
+chisq_result_year_county$p.value 
+
+
+
+
+
+# To find correlation between crime counts in an area with respect to time period
+cont_table_year_period <- table(crime_counts$time_period, crime_counts$county)
+chisq_result_year_period <- chisq.test(cont_table_year_period)  
+
+# Perform the chi-square test on the contingency table
+chisq_result_year_period
+
+# Check the p-value to determine whether to reject or fail to reject the null hypothesis
+chisq_result_year_period$p.value 
+
+
+
+```
+
+
+```{r Hypothesis 1 => Approach 3}
+
+library(tidyverse)
+library(lubridate)
+library(forecast)
+
+# Load Geo package and read the required layers and working on the hypothesis
+miami_data <- st_read("com_police_data.gpkg", layer = "com_violent_crime_2021_22") %>% 
+  st_transform(4326) %>% 
+  st_make_valid() # Make geometries valid
+
+# Filter the dataset to only include the crime type and area of interest
+crime_name <- "SIMPLE ASSAULT"
+area <- "City of Miami"
+miami_data_filtered <- miami_data %>%
+  filter(crime_type == crime_name & county == area)
+
+colnames(miami_data_filtered)
+
+# Calculating incident count every week
+miami_data_filtered <- miami_data_filtered %>%
+  group_by(week) %>%
+  mutate(incident_count = n()) %>%
+  ungroup()
+# Converting the data frame into a time-series object
+miami_df_ts <- ts(miami_data_filtered$incident_count, frequency = 7) # assuming weekly data
+
+# Create a time series plot of the crime counts
+plot(miami_df_ts, main = paste0("Crime Counts for ", crime_name, " in ", area))
+
+# Fit an ARIMA model to the time series data
+arima_model <- auto.arima(miami_df_ts)
+
+# Check the model summary to see the coefficients and significance levels
+summary(arima_model)
+
+# Use the model to make predictions for the next 4 weeks
+predictions <- forecast(arima_model, h = 4)
+
+# Use hypothesis testing to compare the mean crime count during periods with a high previous # crime history to the mean crime count during periods with a low previous crime history
+# For example, we could split the time series data into two groups based on whether the     # crime count in the previous time period was above or below the median, and compare the    # mean crime count for the two groups
+
+prev_crime_history <- miami_df_ts[-1]
+prev_crime_median <- median(prev_crime_history)
+low_prev_crime <- prev_crime_history[prev_crime_history <= prev_crime_median]
+high_prev_crime <- prev_crime_history[prev_crime_history > prev_crime_median]
+mean(low_prev_crime)
+mean(high_prev_crime)
+t.test(low_prev_crime, high_prev_crime)
+
+```
+
+
+
+```{r Hypothesis 1 => Approach 4}
+
+# Load the necessary libraries and the dataset
+library(tidyverse)
+library(caret)
+library(car)
+library(nortest)
+
+
+# Load Geo package and read the required layers and working on the hypothesis
+miami_data <- st_read("com_police_data.gpkg", layer = "com_violent_crime_2021_22") %>% 
+  st_transform(4326) %>% 
+  st_make_valid() # Make geometries valid
+
+# Check the structure and summary statistics of the dataset
+str(miami_data)
+summary(miami_data)
+
+miami_data <- miami_data %>%
+  group_by(date_eu) %>%
+  mutate(incident_count = n()) %>%
+  ungroup()
+
+# Create a linear regression model to predict incident_count based on other variables
+model <- lm(incident_count ~ weekday + county + hour + latitude + longitude, data = miami_data)
+
+# Check the model summary to see the coefficients and significance levels
+summary(model)
+
+# Check the normality of residuals using a Q-Q plot and a Anderson Darling test
+qqPlot(model, main="Q-Q Plot") # requires the car library
+ad.test(residuals(model))
+
+# Check the linearity of the model using a partial residual plot
+crPlots(model) # requires the car library
+
+
+
+```
+
+
+## Hypothesis 2:
+
+## Statement: Proximity to an area of interest affects(increase) the overall crime ## rate for the area?
+
+## Purpose and approach to second hypothesis:
+The purpose of this analysis is to determine if proximity to an area of interest has any effect on the overall crime rate in an area. In this analysis, we will investigate whether the presence of a bank or vault or museum within a certain distance (e.g. 500m or 1km) can be considered as a motivation for a burglary or robbery, and whether this proximity affects the overall crime rate in the area.
+
+#Null and Alternative Hypotheses
+
+H0: Proximity to an area of interest does not affect the crime rate.
+
+Ha: Proximity to an area of interest affects the crime rate.
+
+## Installing package dependencies
+
+```{r Hypothesis 2 => Approach 1}
+
+# Install Packages
+install.packages("contrib.url")
+install.packages("sf")
+install.packages("spatstat")
+install.packages("stars")
+install.packages("ggplot2")
+install.packages("rgdal")
+install.packages("dplyr")
+install.packages("RSQLite")
+install.packages("tidyverse")
+
+# Load the libraries
+library(sf)
+library(spdep)
+library(spatstat)
+library(stars)
+library(ggplot2)
+library(rgdal)
+library(tidyverse)
+library(sf)
+library(dplyr)
+
+# Setting current working directory
+setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
+
+```
+
+
+
+## In this section , data from 3 different layers were joined and suitable columns
+## were extracted. After that frequency/incident_count column was added to proceed ## further with the regression model.
 
 ```{r Loading data and transformation, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
