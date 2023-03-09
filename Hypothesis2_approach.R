@@ -10,7 +10,7 @@ library(sf)
 library(dplyr)
 
 # Setting current working directory
-setwd("D://MyWorkspace//AOSD-Course//R-Workspace//AOSDFinalAssignment//data")
+setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
 
 # Explore the layers available
 layers <- st_layers("com_police_data.gpkg")
@@ -70,7 +70,7 @@ head(miami_crime_data_optimized)
 miami_crime_data_optimized <- na.omit(miami_crime_data_optimized)
 
 # Fit the regression model
-model <- lm(incident_count ~ dist_bank + dist_bars + dist_convenience, dist450m_bank, data = miami_crime_data_optimized)
+model <- lm(incident_count ~ dist_bars + dist_convenience, data = miami_crime_data_optimized)
 
 # Print the model summary
 summary(model)
@@ -82,7 +82,7 @@ anova(model)
 wilcox.test(incident_count ~ dist450m_bank, data = miami_crime_data_optimized)
 
 # Visualize the results
-ggplot(crime_data, aes(x = dist_bank, y = violent_crime_rate)) + 
+ggplot(miami_crime_data_optimized, aes(x = dist_bank, y = incident_count)) + 
   geom_point() + 
   geom_smooth(method = "lm") + 
-  labs(title = "Relationship between crime rate and distance to nearest bank")
+  labs(title = "Relationship between Crime Incident Count and distance to nearest bank")

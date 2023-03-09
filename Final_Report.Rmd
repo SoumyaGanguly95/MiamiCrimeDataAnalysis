@@ -1,0 +1,218 @@
+---
+title: Final Report for the work in Miami Crime Dataset. Hypothesis made , followed
+  by performing exploratory data analysis and finally drawing conclusions and supporting
+  with suitable diagrams.
+author: "Soumya Ganguly"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+```
+
+### Introduction
+
+
+### Data
+
+The dataset used is titled as "Regression Practice Dataset, Miami Public Safety". As the title suggests, it is a dataset related to public safety in the city of Miami, Florida, and is designed for use in regression analysis.
+
+Here is some information about the dataset:
+
+[1] The dataset includes 14 columns, with over 22,000 rows of data. 
+[2] Each row corresponds to a specific incident of crime or public safety concern in Miami.
+[3] Each column provides different information about the incident, such as the date, location, and       type of offense.
+[4] The dataset is designed for use in regression analysis, which means that it is intended to be        used to identify patterns and relationships in the data, with the goal of predicting future          trends or outcomes. 
+[5] The dataset is publicly available on GitHub and was created by an individual named                   routineactivity, who has shared it for educational and research purposes. It is not clear whether     this dataset has been used in any published research or academic work. Overall, this dataset         provides a useful resource for those interested in analyzing patterns and trends in public safety     incidents in the city of Miami. By exploring the data and performing regression analysis, the        researchers and analysts may be able to identify patterns and relationships that could inform        policy decisions or help improve public safety in the city.
+
+### Methods: Research Questions, Hypothesis and approaches
+
+## Formulation of Hypothesis -\> Steps to follow
+
+Step 1: Hypothesis Generation(Before studying the dataset)
+
+Attempt to consider variables which can be possibly present in the dataset. The result will be a set of variables which is present in the dataset and also some parameters which is not present in the concerned
+dataset.
+
+Output: To make a decision or prediction about a possible future crime or related assumptions as per our research question the following variables might be helpful;
+
+1.  Place, Date, Time and Area of occurence: It will help us understand the trend or pattern of occurence of the crime.
+
+2.  Data like area-type for crime might be useful. Type of area like urban , rural, city center, close to airport, tourist spots, party area or downtown for example.
+
+3.  Type of residents/people in that area: if there is data about financial status, age group, employment status of the residents or people frequently observed in the area; it might be useful.
+
+4.  Location of the area; proximity to probable escape routes(border areas and port regions)
+
+5.  Types of Crime: like Fraud, Assault, Murder etc
+
+6.  Frequency of each types of crime in that area
+
+7.  Police to citizen ratio in the area of crime
+
+8.  Availability of CCTV or video evidence
+
+9.  Population density of criminals: If there is a possibility to check the number or people with past criminal records and compare with total population
+
+Step 2: Load and Compare-\> Load the dataset and compare with the hypothesis(educated guess) you have made
+
+
+Step 3: Data Cleaning-\> Identify the columns/variables which are matching with hypothesis and contains significant values to proceeed further. As for the remaining columns ignore/drop them.
+
+Step 4: Frame a research question
+
+Question 1: For a specific region does previous history of crime repeat itself over time?
+
+Premisse: We can consider crime counts, crime logs and also compare data in two different time frames and try to find out common trends.
+
+#Null and Alternative Hypotheses
+
+h0 -\> Previous crime history of certain crime type do not influence subsequent crimes in an area
+
+ha -\> Previous crime history of certain crime type   influences subsequent crimes in an area
+
+
+
+
+
+
+### Results
+
+## Hypothesis 1: 
+
+For a specific region does previous history of crime repeat itself over time?
+
+Premisse: We can consider crime counts, crime logs and also compare data in two different time frames and try to find out common trends.
+
+#Null and Alternative Hypotheses
+
+h0 -\> Previous crime history of certain crime type do not influence subsequent crimes in an area
+
+ha -\> Previous crime history of certain crime type   influences subsequent crimes in an area
+
+
+## Hypothesis 2:
+
+## Research Question: Can proximity to an area of interest, increase the overall crime rate for an 
+## area?
+
+## Purpose and approach to second hypothesis:
+The purpose of this analysis is to determine if proximity to an area of interest has any effect on the overall crime rate in an area. In this analysis, we will investigate whether the presence of a bank or vault or museum within a certain distance (e.g. 500m or 1km) can be considered as a motivation for a burglary or robbery, and whether this proximity affects the overall crime rate in the area.
+
+## Hypothesis
+H0: Proximity to an area of interest does not affect the crime rate.
+
+Ha: Proximity to an area of interest affects the crime rate.
+
+## Installing package dependencies
+
+```{r Installation}
+
+# Install Packages
+install.packages("contrib.url")
+install.packages("sf")
+install.packages("spatstat")
+install.packages("stars")
+install.packages("ggplot2")
+install.packages("rgdal")
+install.packages("dplyr")
+install.packages("RSQLite")
+install.packages("tidyverse")
+
+# Load the libraries
+library(sf)
+library(spdep)
+library(spatstat)
+library(stars)
+library(ggplot2)
+library(rgdal)
+library(tidyverse)
+library(sf)
+library(dplyr)
+
+# Setting current working directory
+setwd("D:/MyWorkspace/AOSD-Course/R-Workspace/MiamiCrimeDataAnalysis/data")
+
+```
+
+
+
+## In this section , data from 3 different layers were joined and suitable columns were 
+## extracted. After that frequency/incident_count column was added to proceed further 
+## with the regression model.
+
+```{r Loading data and transformation, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Load the crime dataset
+miami_data <- st_read("com_police_data.gpkg", layer = "com_violent_crime_2021_22") %>% 
+  st_transform(4326) %>% 
+  st_make_valid()
+
+# Load the neighbourhood dataset
+layer_nhoods <- st_read("com_police_data.gpkg", layer = "com_nhoods") %>% 
+  st_transform(4326) %>% 
+  st_make_valid()
+
+# Join the two datasets based on spatial intersection
+miami_data_with_neighbourhood <- st_join(layer_nhoods, miami_data)
+
+# Renaming LABEL column in miami_data_with_neighbourhood to neighbourhood
+miami_data_with_neighbourhood <- miami_data_with_neighbourhood %>% 
+  rename(neighbourhood = LABEL)
+
+# Load the aggregated layer dataset
+layer_aggregated_data <- read_sf("com_police_data.gpkg", layer = "com_aggregated_data", quiet = TRUE)
+
+# Join the two datasets based on the common attribute neighbourhood
+miami_crime_data_with_nhoods_prox <- left_join(miami_data_with_neighbourhood, layer_aggregated_data, by = "neighbourhood")
+
+# Filter dataset for a specific crime (e.g., "Robbery")
+specific_crime <- "ROBBERY / ARMED W OTHER THAN DEADLY WEAPON"
+filtered_data <- miami_crime_data_with_nhoods_prox %>%
+  filter(crime_type == specific_crime)
+
+# Create a new column "incident_count" based on number of crimes per neighborhood
+miami_crime_data_optimized <- filtered_data %>%
+  group_by(neighbourhood, crime_type, county, geom, dist_bank, dist_convenience, dist_bars, dist450m_bank) %>%
+  summarise(incident_count = n())
+
+# Remove any missing data
+miami_crime_data_optimized <- na.omit(miami_crime_data_optimized)
+
+```
+
+
+## In this section the data was fitted into chosen model follwed by evaluation.
+```{r Hypothesis Testing and Result, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Fit the regression model
+model <- lm(incident_count ~ dist_bars + dist_convenience, data = miami_crime_data_optimized)
+
+# Print the model summary
+summary(model)
+
+# Test the hypothesis using ANOVA
+anova(model)
+
+# Perform the Wilcoxon rank-sum test
+wilcox.test(incident_count ~ dist450m_bank, data = miami_crime_data_optimized)
+
+# Visualize the results
+ggplot(miami_crime_data_optimized, aes(x = dist_bank, y = incident_count)) + 
+  geom_point() + 
+  geom_smooth(method = "lm") + 
+  labs(title = "Relationship between Crime Incident Count and distance to nearest bank")
+
+```
+
+
+
+### Conclusions
+
+
+### References
+
+
