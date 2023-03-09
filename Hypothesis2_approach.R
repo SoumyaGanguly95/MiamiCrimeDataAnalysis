@@ -78,6 +78,9 @@ summary(model)
 # Test the hypothesis using ANOVA
 anova(model)
 
+# Perform the Wilcoxon rank-sum test
+wilcox.test(incident_count ~ dist450m_bank, data = miami_crime_data_optimized)
+
 # Visualize the results
 ggplot(crime_data, aes(x = dist_bank, y = violent_crime_rate)) + 
   geom_point() + 
