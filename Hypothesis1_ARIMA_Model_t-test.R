@@ -49,3 +49,5 @@ high_prev_crime <- prev_crime_history[prev_crime_history > prev_crime_median]
 mean(low_prev_crime)
 mean(high_prev_crime)
 t.test(low_prev_crime, high_prev_crime)
+
+

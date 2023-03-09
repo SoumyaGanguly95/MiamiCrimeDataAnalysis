@@ -14,7 +14,7 @@ miami_data <- st_read("com_police_data.gpkg") %>%
 st_layers("com_police_data.gpkg")
 
 # Load Geo package and read the required layers and working on the hypothesis
-miami_data_violent_crimes <- st_read("com_police_data.gpkg", layer = "com_burg_epsg3511") %>% 
+miami_data_violent_crimes <- st_read("com_police_data.gpkg", layer = "com_violent_crime_2021_22") %>% 
   st_transform(4326) %>% 
   st_make_valid() # Make geometries valid
 
