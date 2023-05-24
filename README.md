@@ -23,3 +23,6 @@ the notebook sources, or R script(s) the document rendered in its final presenta
 
 ## Datasets
 https://github.com/routineactivity/city_of_miami_dataset
+
+## Implementation Details
+Please refer to the Final_Report.Rmd or Final_Report.html for end to end project implementation and documentation.
