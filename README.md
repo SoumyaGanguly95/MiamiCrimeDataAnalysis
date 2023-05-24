@@ -1,6 +1,6 @@
 # MiamiCrimeDataAnalysis
 Goal
-The goal is to carry out a potentially simple but proper analysis on the spatiotemporal dataset, and develop a report on your findings that shall be submitted in a reproducible way.
+The goal is to carry out a potentially simple but proper analysis on the spatiotemporal dataset, and develop a report on your findings that shall be submitted in a reproducible way. A crime dataset of Miami, USA has been considered to conduct the study. Based on the information available from the dataset, some hypothesis is made and efforts were made to load and analyze, make predictions and then prove/disprove the hypothesis. The aim was also to make predictions on the crime data which can help the administration take suitable action to stop the crime from reciprocating in the future. The scientific report to justify this study is available in form of a markdown document. In the subsequent sections the report structure , reproducibility aspects and the data set details have been explained.
 
 # Report requirements
 Style: scientific writing
